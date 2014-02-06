@@ -1076,7 +1076,7 @@ switch($_GET['p']) {
 						// иначе добавляем 
 						else
 						{
-							$sql = "INSERT INTO $tbl_sbscr VALUES ('', '".$_POST['firstname']."', '".$_POST['lastname']."', '".$_POST['email']."', '', '', '', now(),'".$_POST['kategory_id']."') ";
+							$sql = "INSERT INTO $tbl_sbscr VALUES (NULL, '".$_POST['firstname']."', '".$_POST['lastname']."', '".$_POST['email']."', '', '', '', now(),'".$_POST['kategory_id']."') ";
 							$modx->db->query($sql);
 							header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
 						}

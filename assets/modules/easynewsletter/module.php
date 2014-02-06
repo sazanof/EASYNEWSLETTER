@@ -103,6 +103,7 @@ $sql = "CREATE TABLE IF NOT EXISTS `easynewsletter_subscribers` (
   `blocked` int(11) NOT NULL default '0',
   `lastnewsletter` varchar(50) NOT NULL default '',
   `created` date NOT NULL default '0000-00-00',
+  `cat_id` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 )";
 $modx->db->query($sql);
