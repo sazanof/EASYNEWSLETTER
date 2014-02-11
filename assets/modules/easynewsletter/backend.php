@@ -1,9 +1,8 @@
 <?php
 /*
 Easy Newsletter 1.0
-Copyright by: Flux - www.simpleshop.dk
 Update by: Sazanof - www.sazanof.ru
-Date: 30.01 2014
+Date: 11.02 2014
 Notes: This newsletter system is heavily inspired by KoopsmailinglistX so a bow in respect and appreciation to the original author Jasper Koops and sottwell@sottwell.com who ported it to MODx.
 
 ---------------------------------------------------------------------
@@ -115,7 +114,7 @@ switch($_GET['p']) {
 					
 					if (is_array($_SESSION['check-some']))
 							{
-									$list.=' <br> <a class="but" href="index.php?a=112&id=4&p=1&action=2&nid='.mysql_result($result,$i,"id").'&check=1">Отправить письмо выбранным</a>';
+									$list.=' <br> <a class="but" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=2&nid='.mysql_result($result,$i,"id").'&check=1">Отправить письмо выбранным</a>';
 							}
 					
 					$list.='</td>';
@@ -157,7 +156,7 @@ switch($_GET['p']) {
 			$authpassword = mysql_result($result,$i,"authpassword");
 			
 			include_once "../manager/includes/controls/class.phpmailer.php";
-			$sql = "SELECT email FROM $tbl_sbscr ORDER BY email ASC";
+			$sql = "SELECT email,firstname FROM $tbl_sbscr ORDER BY email ASC";
 			// получаем массив из сессии выбранных
 			if (is_array($_SESSION['check-some']) and $_GET['check']==1)
 			{
@@ -165,7 +164,7 @@ switch($_GET['p']) {
 				$array = $_SESSION['check-some'];
 				foreach ($array as $id)
 				{
-					$sql = "SELECT email FROM $tbl_sbscr WHERE id='".$id."'";
+					$sql = "SELECT email,firstname FROM $tbl_sbscr WHERE id='".$id."'";
 					$eml = $modx->db->getRow($modx->db->query($sql));
 					$ar[]= array('email'=>$eml['email']);
 				}
@@ -178,42 +177,54 @@ switch($_GET['p']) {
 			$i=0;
 			$sentsuccess=0;
 			$out .=  '<div class="infoMess">'.$lang_newsletter_sending.'</div>';
-			foreach ($ar as $eml)
+			
+			// начинаем запись log файлов
+			$hand = fopen($path."logs/".date('d-m-Y H_i_s').".csv","w");
+			if(fwrite($hand,iconv("utf-8","windows-1251",
+			$newsletter_subject." 
+			(проведенная рассылка)\n
+			Дата проведения: ".date('d-m-Y в H:i:s')."
+			\n")))
 			{
-				$mail = new PHPMailer();
-				if ($mailmethod == IsMail) {$mail->IsMail();}
-				if ($mailmethod == IsSMTP) {
-					$mail->IsSMTP();
-					$mail->Host = $smtp;
-					if ($auth == 'true') {
-						$mail->SMTPAuth = true;
-						$mail->Username = $authuser;
-						$mail->Password = $authpassword;
-					} else {
-						$mail->SMTPAuth = false;
+				foreach ($ar as $eml)
+				{
+					$mail = new PHPMailer();
+					if ($mailmethod == IsMail) {$mail->IsMail();}
+					if ($mailmethod == IsSMTP) {
+						$mail->IsSMTP();
+						$mail->Host = $smtp;
+						if ($auth == 'true') {
+							$mail->SMTPAuth = true;
+							$mail->Username = $authuser;
+							$mail->Password = $authpassword;
+						} else {
+							$mail->SMTPAuth = false;
+						}
 					}
+					if ($mailmethod == IsSendmail) {$mail->IsSendmail();}
+					if ($mailmethod == IsQmail) {$mail->IsQmail();}
+					$mail->CharSet = $modx->config['modx_charset'];
+					$mail->From		= $from;
+					$mail->FromName	= $fromname;
+					$mail->Subject	= $newsletter_subject;
+					$mail->Body		= $newsletter_newsletter;
+					$mail->AltBody	= $newsletter_newsletter;
+					$mail->AddAddress($eml['email']);
+					if(!$mail->send()) {
+						$out .=  $lang_newsletter_sending_done4;
+						return 'Main mail: ' . $_lang['ef_mail_error'] . $mail->ErrorInfo;
+					} else {
+						$string = ($i+1).";$eml[email];$eml[firstname];$eml[lastname]\n";
+						fwrite($hand,iconv("utf-8","windows-1251",$string));
+						$out .='Отправлено => '.$eml['email'].'<br>';
+						// обновляем информацию о последнем отправленном письме в БД
+						$sql="UPDATE $tbl_sbscr SET lastnewsletter='".time()."' WHERE email='".$eml['email']."'";
+						$modx->db->query($sql);
+						$sentsuccess++;
+					}
+					$i++;
 				}
-				if ($mailmethod == IsSendmail) {$mail->IsSendmail();}
-				if ($mailmethod == IsQmail) {$mail->IsQmail();}
-				$mail->CharSet = $modx->config['modx_charset'];
-				$mail->From		= $from;
-				$mail->FromName	= $fromname;
-				$mail->Subject	= $newsletter_subject;
-				$mail->Body		= $newsletter_newsletter;
-				$mail->AltBody	= $newsletter_newsletter;
-				$mail->AddAddress($eml['email']);
-				if(!$mail->send()) {
-					$out .=  $lang_newsletter_sending_done4;
-					return 'Main mail: ' . $_lang['ef_mail_error'] . $mail->ErrorInfo;
-				} else {
-					$out .='Отправлено => '.$eml['email'].'<br>';
-					// обновляем информацию о последнем отправленном письме в БД
-					$sql="UPDATE $tbl_sbscr SET lastnewsletter='".time()."' WHERE email='".$eml['email']."'";
-					$modx->db->query($sql);
-					$sentsuccess++;
-				}
-				$i++;
-			}
+			
 			// Обновляем счетчик отправки
 			$s = "SELECT dates FROM `easynewsletter_newsletter` WHERE id='".(int)$_GET['nid']."'";
 			$r = $modx->db->getRow($modx->db->query($s));
@@ -221,6 +232,14 @@ switch($_GET['p']) {
 			$modx->db->query($sql);
 			// отчеты об отправки писем
 			$out .=  '<div class="infoMess">'.$lang_newsletter_sending_done1 . $sentsuccess . $lang_newsletter_sending_done2 . $num . $lang_newsletter_sending_done3.'</div>';
+			}
+			else
+			{
+				echo "Запись в файл не удалась. И отправка тоже =(. Проверьте папку easynewsletter/logs на существование и запись";
+			}
+			// закрываем лог файл после записи
+			fclose($hand);
+			
 		} elseif ($_GET['action'] == 3) {
 			// Newsletter Rich Text Editor
 			$action = 4;
