@@ -166,7 +166,7 @@ switch($_GET['p']) {
 				{
 					$sql = "SELECT email,firstname FROM $tbl_sbscr WHERE id='".$id."'";
 					$eml = $modx->db->getRow($modx->db->query($sql));
-					$ar[]= array('email'=>$eml['email']);
+					$ar[]= array('email'=>$eml['email'],'firstname'=>$eml['firstname'],);
 				}
 			}
 			// или получаем массив из email адресов из БД
@@ -214,9 +214,9 @@ switch($_GET['p']) {
 						$out .=  $lang_newsletter_sending_done4;
 						return 'Main mail: ' . $_lang['ef_mail_error'] . $mail->ErrorInfo;
 					} else {
-						$string = ($i+1).";$eml[email];$eml[firstname];$eml[lastname]\n";
+						$string = ($i+1).";".$eml['email'].";".$eml['firstname']."\n";
 						fwrite($hand,iconv("utf-8","windows-1251",$string));
-						$out .='Отправлено => '.$eml['email'].'<br>';
+						$out .='Отправлено => '.$eml['email']."____".$eml['firstname'].'<br>';
 						// обновляем информацию о последнем отправленном письме в БД
 						$sql="UPDATE $tbl_sbscr SET lastnewsletter='".time()."' WHERE email='".$eml['email']."'";
 						$modx->db->query($sql);
