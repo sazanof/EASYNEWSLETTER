@@ -21,14 +21,14 @@
 	border-radius:3px;
 	border:1px solid #ccc;
 	display:inline-block;
-	color:#444;
+	color:#444 !important;
 	font-family:arial;
 	font-size:12px;
 	font-weight:bold;
 	padding:5px 6px;
 	text-decoration:none; margin:3px 3px 3px 0; cursor:pointer;
 	text-shadow:1px 1px 0px #ffffff;
-	width:auto;
+	width:auto; text-decoration:none !important;
 }
 .but img {float:left; margin-right:4px}
 .but:hover {
@@ -54,7 +54,7 @@
 
 div.predpr {display:inline-block; width:230px; padding:6px; margin:10px; border:1px dashed #888; border-radius:4px}
 
-.gridSubscribers {border:1px solid #ccc; background:#fff; margin-bottom:70px;}
+.gridSubscribers {border:1px solid #ccc; background:#fff; margin-bottom:10px;}
 .gridSubscribers tr td {padding:2px 6px}
 .gridSubscribers tr:hover td {background: #d4d4d4; cursor:pointer; border-color:#999}
 
@@ -74,3 +74,8 @@ div.predpr {display:inline-block; width:230px; padding:6px; margin:10px; border:
 .actButs {text-align:right; z-index:10;position:fixed; bottom:0; box-shadow:0 0 10px #333; right:30px; background:#fff; border-top:4px solid #ddd;border-right:4px solid #ddd;  border-left:4px solid #ddd;  border-radius:5px 5px 0 0; padding:4px}
 .actButs span {display:block; font-weight:bold; text-align:left}
 .actButs.add-form {left:10px; right:auto; background:#c5ecbb; border-color:#8bb97e}
+
+.pagination {height:30px}
+.pagination a {display:block; margin:10px}
+#next {display:none}
+#infscr-loading {text-align:center; display:block;position:fixed; padding:10px; background:#d3fbca; font-weight:bold; border:1px solid #96d288; border-radius:3px;z-index:100; top:10px; left:10px}

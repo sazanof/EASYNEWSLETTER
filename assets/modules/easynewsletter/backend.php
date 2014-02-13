@@ -64,7 +64,7 @@ switch($_GET['p']) {
 			} else {
 				$sortorder = $_GET['sortorder'];
 			}
-			$sql = "SELECT * FROM `easynewsletter_newsletter` ORDER BY `".$sortorder."` ASC";
+			$sql = "SELECT * FROM `easynewsletter_newsletter` ORDER BY `".$sortorder."`";
 			$result = $modx->db->query($sql);
 			$num = mysql_num_rows($result);
 			if ($num > 0) {
@@ -96,6 +96,11 @@ switch($_GET['p']) {
 					</div>
 					';
 				}
+				// отчет по логам
+				$list .='
+				<div class="actionMainSend">
+							<a class="but" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=9"><img src="/assets/modules/easynewsletter/images/folder_page_add.png"> Файлы отчетов</a>
+				</div>';
 				$list .= '
 				<table style="font-size: 12px;" cellspacing="0" width="100%" class="gridSubscribers">';
 				// кнопка создать письмо
@@ -444,6 +449,23 @@ switch($_GET['p']) {
 		$out .='';
 		$out .='</div>';
 	}
+	// файлы отчетов выводим
+	elseif ($_GET['action'] == 9) 
+	{
+		$dirList= scandir(MODX_BASE_PATH.'assets/modules/easynewsletter/logs/');
+		unset($dirList[0],$dirList[1]);
+		if (in_array('index.html',$dirList))
+		{
+			unset($dirList[array_search('index.html',$dirList)]);
+		}
+		$out .='<div class="sectionHeader">Файлы отчетов об отправке (логи)</div>';
+		$out .='<div class="sectionBody"><ul>';
+		foreach ($dirList as $log)
+		{
+			$out.='<li><a href="/assets/modules/easynewsletter/logs/'.$log.'">'.$log.'</a></li>';
+		}
+		$out.='</ul></div>';
+	}
 	break;
 	case 2:
 		if ($_GET['action'] == 1) {
@@ -755,6 +777,10 @@ switch($_GET['p']) {
 	</fieldset>';
 	$out .='</div>';
 	break;
+	// help / раздел помощи
+	case 5 :
+	$out.=file_get_contents($path.'/help/help.html');
+	break;
 	default:
 		if ($_GET['action'] == 1) {
 			// если добавляем
@@ -854,11 +880,22 @@ switch($_GET['p']) {
 						$filter = "WHERE cat_id=''";
 					}
 				}
-				$sql = "SELECT * FROM $tbl_sbscr $filter ORDER BY `".$sortorder."` ASC";
+				$limit = 20;
+				if($_GET['page'])
+				{
+					$start = ((int)$_GET['page'] - 1) * $limit;
+				}
+				else
+				{
+					$_GET['page']=1;
+					$start =0;
+					//header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1&page=1');
+				}
+				$sql = "SELECT * FROM $tbl_sbscr $filter ORDER BY `".$sortorder."` ASC LIMIT $start,$limit";
 				$result = $modx->db->query($sql);
 				$num = $modx->db->getRecordCount($result);
-				if ($num > 0) {
-				$list = '<script type="text/javascript">
+				if ($num > 0) {				
+				$list .= '<script type="text/javascript">
 					<!--
 					function delete_subscriber(a,b,c,d)
 					{
@@ -969,7 +1006,7 @@ switch($_GET['p']) {
 						$row = $modx->db->getRow($result);	
 						$list .=	'
 					
-						<tr valign="middle" class="
+						<tr valign="middle" id="row" class="
 						';
 						if (is_array($_SESSION['check-some']))
 							{
@@ -992,7 +1029,7 @@ switch($_GET['p']) {
 							}
 							
 							$list.='>
-							<b>'.($i + 1).'</b> <small>/ '.mysql_result($result,$i,"id").'</small>
+							<b>'.($i + $start + 1).'</b> <small>/ '.mysql_result($result,$i,"id").'</small>
 						</td>
 						<td class="row"><label for="check'.mysql_result($result,$i,"id").'"><img src="'.$href.'images/03.png" style="top:2px; position:relative; margin-right:5px" height="13"> <b>'.mysql_result($result,$i,"email").'</b></label></td>
 						<td class="row">'.mysql_result($result,$i,"firstname").'&nbsp;</td>
@@ -1012,11 +1049,25 @@ switch($_GET['p']) {
 						$i++;
 					}
 					$list .= '
-					</table><div style="height:30px"></div>
-					</form>
+					</table></form>';
+					//pagination
+					$page = (int)$_GET['page']+1;
+					$tot = "SELECT id FROM $tbl_sbscr $filter";
+					$total = $modx->db->getRecordCount($modx->db->query($tot));
+					$lastpage = ceil($total/$limit);
+					if ((int)$_GET['page']>$lastpage)
+					{
+						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
+					}
+					$list .= '<div class="pagination">';
+					$list .= '<a id="next" href="index.php?a=112&id='.$_REQUEST['id'].'&action=1&page='.$page.'">'.$page.'</a>';
+					$list.='</div>';
+					$list.='
+					
 					</div>';
 					$out .=  $list;
-				} else {
+				} 
+				else {
 				/// если нет подписчиков
 					$out .=
 					'<div class="sectionBody">

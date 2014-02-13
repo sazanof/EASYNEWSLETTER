@@ -158,13 +158,26 @@ $menu .=    $menu_add.'<li id="Button1"><a href="index.php?a=112&id='.$modId.'&a
 				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=1&action=1"><img src="'.$href.'images/pisma.png"> '.$lang_links_newsletter.'</a></li>
 				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=4"><img src="'.$href.'images/36.png"> Категории</a></li>
 				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=3"><img src="'.$href.'images/28.png"> '.$lang_links_import.'</a></li>
-				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=2&action=1"><img src="'.$href.'images/settings.png"> '.$lang_links_configuration.'</a></li>';
+				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=2&action=1"><img src="'.$href.'images/settings.png"> '.$lang_links_configuration.'</a></li>
+				<li id="Button1"><a style="padding:4px" href="index.php?a=112&id='.$modId.'&p=5"><img src="'.$href.'images/event1.png"></a></li>
+				';
 
 				$menu .=    '</ul>
 		</div>';
 $out .= $menu;
 $out .=  '
 </div>
+<script src="'.$href.'js/infinitescroll.js" type="text/javascript"></script>
+<!-- Infinite Scroll вызов в контенте -->
+	<script type="text/javascript">    
+	    $(\'.gridSubscribers\').infinitescroll({
+			navSelector  : "a#next",            
+			nextSelector : "a#next",    
+			itemSelector : "#row",          
+			debug        : false,
+			loadingImg   : "assets/templates/site/infinitescroll/ajax-loader.gif"
+		});
+	</script>
 </body>
 </html>
 ';
