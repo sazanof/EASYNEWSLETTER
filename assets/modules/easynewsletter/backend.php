@@ -869,15 +869,15 @@ switch($_GET['p']) {
 				{
 					if ((int)$_POST['filter'])
 					{
-						$filter = 'WHERE cat_id='.$_POST['filter'];
+						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1&cat='.$_POST['filter']);
 					}
 					elseif ($_POST['filter']=='all')
 					{
-						$filter = '';
+						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
 					}
-					elseif ($_POST['filter']=='empty')
+					elseif ($_POST['filter']=='0')
 					{
-						$filter = "WHERE cat_id=''";
+						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1&cat=0');
 					}
 				}
 				$limit = 20;
@@ -890,6 +890,14 @@ switch($_GET['p']) {
 					$_GET['page']=1;
 					$start =0;
 					//header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1&page=1');
+				}
+				if ((int)$_GET['cat'])
+				{
+					$filter = 'WHERE cat_id="'.(int)$_GET['cat'].'"';
+				}
+				else
+				{
+					$filter ='';
 				}
 				$sql = "SELECT * FROM $tbl_sbscr $filter ORDER BY `".$sortorder."` ASC LIMIT $start,$limit";
 				$result = $modx->db->query($sql);
@@ -954,8 +962,8 @@ switch($_GET['p']) {
 					<div class="actionMainSendRight">
 							<select name="filter">
 								<option value="all">Все</option>
-								<option value="empty"';
-								if ($_POST['filter']=='empty')
+								<option value="0"';
+								if ($_GET['cat']=='0')
 										{
 											$list.=' selected ';
 										}
@@ -969,7 +977,7 @@ switch($_GET['p']) {
 									$n = $modx->db->getRecordCount($res);
 									if($n>0){
 										$list.='<option value="'.$kat['id'].'"';
-										if ($kat['id']==$_POST['filter'])
+										if ($kat['id']==$_GET['cat'])
 										{
 											$list.=' selected ';
 										}
@@ -1060,7 +1068,12 @@ switch($_GET['p']) {
 						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
 					}
 					$list .= '<div class="pagination">';
-					$list .= '<a id="next" href="index.php?a=112&id='.$_REQUEST['id'].'&action=1&page='.$page.'">'.$page.'</a>';
+					$list .= '<a id="next" href="index.php?a=112&id='.$_REQUEST['id'].'&action=1';
+					if ((int)$_GET['cat'])
+					{
+						$list.='&cat='.(int)$_GET['cat'];
+					}
+					$list.='&page='.$page.'">'.$page.'</a>';
 					$list.='</div>';
 					$list.='
 					
