@@ -358,16 +358,18 @@ switch($_GET['p']) {
 				foreach ($r as $str)
 				{
 					$line .= 
-					trim($str['id']).';'.
-					trim($str['firstname']).';'.
+					$str['id'].';'.
+					$str['firstname'].';'.
 					trim($str['lastname']).';'.
-					trim($str['email']).';'.
-					trim($str['status']).';'.
-					trim($str['blocked']).';'.
-					trim($str['lastnewsletter']).';'.
-					trim($str['created']).';'.
-					trim($str['cat_id']).
+					$str['email'].';'.
+					$str['status'].';'.
+					$str['blocked'].';'.
+					$str['lastnewsletter'].';'.
+					$str['created'].';'.
+					$str['cat_id'].
 					"\n";
+					
+					//echo $str['cat_id'];
 				}
 				file_put_contents(MODX_BASE_PATH.'assets/modules/easynewsletter/s_backups/'.$title_bckp.'.csv',$line);
 				header('Location:'.$_SERVER['REQUEST_URI']);
@@ -1025,7 +1027,7 @@ switch($_GET['p']) {
 						">';
 						$list .= '
 						<td class="row" width="110" align="center">
-							<input id="check'.mysql_result($result,$i,"id").'" class="ch" type="checkbox" value="'.mysql_result($result,$i,"id").'" name="check-some[]"';
+							<input onclick="checkBlock();" id="check'.mysql_result($result,$i,"id").'" class="ch" type="checkbox" value="'.mysql_result($result,$i,"id").'" name="check-some[]"';
 							if (is_array($_SESSION['check-some']))
 							{
 								if(in_array(mysql_result($result,$i,"id"),$_SESSION['check-some']))

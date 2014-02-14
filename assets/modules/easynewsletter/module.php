@@ -131,7 +131,7 @@ $(document).ready(function() {
             $(".ch").attr("checked","checked");
     });
 	
-	$(".ch,#check_all").click(function () {
+	$("#check_all").click(function () {
 		if ($(".ch").is(":checked"))
             {
 				$(".add-form").css("display","inline-block");
@@ -141,8 +141,18 @@ $(document).ready(function() {
 			$(".add-form").css("display","none");
 		}
 	});
-	
 });   
+function checkBlock()
+	{
+			if ($(".ch").is(":checked"))
+				{
+					$(".add-form").css("display","inline-block");
+				}
+			else
+			{
+				$(".add-form").css("display","none");
+			}	
+	}
 </script>
 </head>
 <body>
@@ -175,7 +185,7 @@ $out .=  '
 			nextSelector : "a#next",    
 			itemSelector : "#row",          
 			debug        : false,
-			loadingImg   : "assets/templates/site/infinitescroll/ajax-loader.gif"
+			loadingImg   : "assets/templates/site/infinitescroll/ajax-loader.gif",
 		});
 	</script>
 </body>
