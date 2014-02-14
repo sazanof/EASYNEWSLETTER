@@ -358,15 +358,15 @@ switch($_GET['p']) {
 				foreach ($r as $str)
 				{
 					$line .= 
-					$str['id'].';'.
+					trim($str['id']).';'.
 					$str['firstname'].';'.
 					trim($str['lastname']).';'.
-					$str['email'].';'.
-					$str['status'].';'.
-					$str['blocked'].';'.
-					$str['lastnewsletter'].';'.
-					$str['created'].';'.
-					$str['cat_id'].
+					trim)$str['email']).';'.
+					trim($str['status']).';'.
+					trim($str['blocked']).';'.
+					trim$str['lastnewsletter']).';'.
+					trim($str['created']).';'.
+					trim($str['cat_id']).
 					"\n";
 					
 					//echo $str['cat_id'];
