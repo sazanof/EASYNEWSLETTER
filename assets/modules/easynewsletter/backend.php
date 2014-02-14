@@ -359,17 +359,15 @@ switch($_GET['p']) {
 				{
 					$line .= 
 					trim($str['id']).';'.
-					$str['firstname'].';'.
+					trim($str['firstname']).';'.
 					trim($str['lastname']).';'.
-					trim)$str['email']).';'.
+					trim($str['email']).';'.
 					trim($str['status']).';'.
 					trim($str['blocked']).';'.
-					trim$str['lastnewsletter']).';'.
+					trim($str['lastnewsletter']).';'.
 					trim($str['created']).';'.
 					trim($str['cat_id']).
 					"\n";
-					
-					//echo $str['cat_id'];
 				}
 				file_put_contents(MODX_BASE_PATH.'assets/modules/easynewsletter/s_backups/'.$title_bckp.'.csv',$line);
 				header('Location:'.$_SERVER['REQUEST_URI']);
