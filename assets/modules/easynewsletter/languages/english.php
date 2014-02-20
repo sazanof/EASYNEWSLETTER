@@ -1,7 +1,7 @@
 <?php
 # Easy Newsletter 0.3
 # Created by: Flux
-# Language: Danish
+# Language: English
 # ------------------------------------------------------------------------
 $lang_title = "модуль управления рассылкой для MODx Evolution";
 $lang_links_subscribers = "Subscribers";
