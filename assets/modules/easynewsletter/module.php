@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------
 UPD май 2013
 - убрал /manager/ , заменил на MODX_MANAGER_PATH
-- убрал $modId из конфигурации
+- убрал $mod_id из конфигурации
 - убрал $path из конфигурации
 - исправлена проблема с сылками
 UPD июнь 2013
@@ -47,7 +47,7 @@ UPD декабрь 2013 - январь 2014
 - установка / обновление в howto.html
 ---------------------------------------------------------------------*/
 
-$modId = $_REQUEST['id'];
+$mod_id = $_REQUEST['id'];
 $path = MODX_BASE_PATH.'assets/modules/easynewsletter/';
 $href = '/assets/modules/easynewsletter/';
 $sql = "SHOW TABLES LIKE 'easynewsletter_config'";
@@ -111,15 +111,27 @@ header('Location:'.$_SERVER['REQUEST_URI']);
 $out .=  'Easy Newsletter has now been installed. Please click <strong>Easy Newsletter</strong> in the navigation bar.';
 } else {
 $theme = $modx->config['manager_theme'];
-$sql = "SELECT * FROM `easynewsletter_config` WHERE `id` = 1";
-$result = $modx->db->query($sql);
-include($path.'languages/'.mysql_result($result,$i,"lang_backend").'.php');
+
+$manager_language = $modx->config['manager_language'];
+if ($modx->getLoginUserID()) {
+    $sql = "SELECT setting_name, setting_value FROM " . $modx->getFullTableName('user_settings') . " WHERE setting_name='manager_language' AND user=" . $modx->getLoginUserID();
+    $rs = $modx->db->query($sql);
+    if ($modx->db->getRecordCount($rs) > 0) {
+        $row = $modx->db->getRow($rs);
+        $manager_language = $row['setting_value'];
+    }
+}
+if (file_exists($path.'languages/' . $manager_language . '.php')) {
+    include($path.'languages/' . $manager_language . '.php');
+} else {
+    include($path.'languages/' . 'lang/english.php');
+}
 $out .=  '
 <html>
 <head>
 <title>MODx EasyNewsetter</title>
 <meta http-equiv="Content-Type" content="text/html; charset='.$modx->config['modx_charset'].'" />
-<link rel="stylesheet" type="text/css" href="/manager/media/style/MODxStyle/style.css" />
+<link rel="stylesheet" type="text/css" href="/manager/media/style/'.$theme.'/style.css" />
 <link rel="stylesheet" type="text/css" href="'.$href.'css/style.css" />
 <script src="'.$href.'js/jquery.js" type="text/javascript"></script>
 <script>
@@ -153,23 +165,41 @@ function checkBlock()
 				$(".add-form").css("display","none");
 			}	
 	}
+	$(document).ready(function() {
+		$("#email_filter").keyup(function () {
+			$.ajax({
+							type: "POST",
+							url: "'.$href.'ajax.options.php",
+							data: {
+								email_filter:$("#email_filter").val(),
+								cat:'.(int)$_GET['cat'].'
+							},
+							success: function(text){
+								$(".gridSubscribers").html(text)
+							}
+						});
+		});
+	});
+	
 </script>
 </head>
 <body>
 <br />
-<h1>Easy Newsletter - '.$lang_title.'</h1>
+<h1>Easy Newsletter - '.$lang['title'].'</h1>
 
 <div class="sectionBody">
-<b>'.$lang_links_header.'</b>';
+<b>'.$lang['links_header'].'</b>';
 include($path.'backend.php');
 $menu = '<div id="actions">
 			<ul class="actionButtons">';
-$menu .=    $menu_add.'<li id="Button1"><a href="index.php?a=112&id='.$modId.'&action=1"><img src="'.$href.'images/subscribers.png"> '.$lang_links_subscribers.'</a></li>
-				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=1&action=1"><img src="'.$href.'images/pisma.png"> '.$lang_links_newsletter.'</a></li>
-				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=4"><img src="'.$href.'images/36.png"> Категории</a></li>
-				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=3"><img src="'.$href.'images/28.png"> '.$lang_links_import.'</a></li>
-				<li id="Button1"><a href="index.php?a=112&id='.$modId.'&p=2&action=1"><img src="'.$href.'images/settings.png"> '.$lang_links_configuration.'</a></li>
-				<li id="Button1"><a style="padding:4px" href="index.php?a=112&id='.$modId.'&p=5"><img src="'.$href.'images/event1.png"></a></li>
+$menu .=    $menu_add.'
+				<li id="ToTop"><a style="padding:4px" href="#"><img src="'.$href.'images/arrow_up.png"></a></li>
+				<li id="Button1"><a href="index.php?a=112&id='.$mod_id.'&action=1"><img src="'.$href.'images/subscribers.png"> '.$lang['links_subscribers'].'</a></li>
+				<li id="Button1"><a href="index.php?a=112&id='.$mod_id.'&p=1&action=1"><img src="'.$href.'images/pisma.png"> '.$lang['links_newsletter'].'</a></li>
+				<li id="Button1"><a href="index.php?a=112&id='.$mod_id.'&p=4"><img src="'.$href.'images/36.png"> Категории</a></li>
+				<li id="Button1"><a href="index.php?a=112&id='.$mod_id.'&p=3"><img src="'.$href.'images/28.png"> '.$lang['links_import'].'</a></li>
+				<li id="Button1"><a href="index.php?a=112&id='.$mod_id.'&p=2&action=1"><img src="'.$href.'images/settings.png"> '.$lang['links_configuration'].'</a></li>
+				<li id="Button1"><a style="padding:4px" href="index.php?a=112&id='.$mod_id.'&p=5"><img src="'.$href.'images/event1.png"></a></li>
 				';
 
 				$menu .=    '</ul>
@@ -181,12 +211,31 @@ $out .=  '
 <!-- Infinite Scroll вызов в контенте -->
 	<script type="text/javascript">    
 	    $(\'.gridSubscribers\').infinitescroll({
-			navSelector  : "a#next",            
+			navSelector  : ".pagination",            
 			nextSelector : "a#next",    
 			itemSelector : "#row",          
 			debug        : false,
 			loadingImg   : "assets/templates/site/infinitescroll/ajax-loader.gif",
 		});
+		
+$( document ).ready(function($){
+	var 
+	speed = 300,
+	scrollTop = $(\'#ToTop\');		
+
+	scrollTop.click(function(e){
+		e.preventDefault();
+
+		$( \'html:not(:animated),body:not(:animated)\' ).animate({ scrollTop: 0}, speed );
+	});
+
+	//появление
+	function show_scrollTop(){
+		( $(window).scrollTop() > 300 ) ? scrollTop.fadeIn(300) : scrollTop.fadeOut(300);
+	}
+	$(window).scroll( function(){ show_scrollTop(); } );
+	show_scrollTop();
+});
 	</script>
 </body>
 </html>

@@ -77,5 +77,5 @@ div.predpr {display:inline-block; width:230px; padding:6px; margin:10px; border:
 
 .pagination {height:30px}
 .pagination a {display:block; margin:10px}
-#next {display:none}
+#next,#ToTop {display:none}
 #infscr-loading {text-align:center; display:block;position:fixed; padding:10px; background:#d3fbca; font-weight:bold; border:1px solid #96d288; border-radius:3px;z-index:100; top:10px; left:10px}

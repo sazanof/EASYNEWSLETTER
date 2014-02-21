@@ -25,12 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 $tbl_kat = "easynewsletter_categories";
 $tbl_sbscr = "easynewsletter_subscribers";
 $tbl_config = "easynewsletter_config";
-
-$sql = "SELECT * FROM $tbl_config WHERE `id` = 1";
-$result = $modx->db->query($sql);
-include($path.'languages/'.mysql_result($result,$i,"lang_backend").'.php');
-include(MODX_MANAGER_PATH.'/includes/config.inc.php');
-error_reporting(E_ALL ^ E_NOTICE);
 if(!isset($_GET['p'])) { $_GET['p'] = ''; }
 if(!isset($_GET['action'])) { $_GET['action'] = 1; }
 
@@ -72,18 +66,18 @@ switch($_GET['p']) {
 				<!--
 				function delete_newsletter(a,b)
 				{
-				answer = confirm("'.$lang_newsletter_delete_alert.'\n"+b)
+				answer = confirm("'.$lang['newsletter_delete_alert'].'\n"+b)
 				if (answer !=0)
 				{
-				location = "index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=6&nid="+a
+				location = "index.php?a=112&id='.$mod_id.'&p=1&action=6&nid="+a
 				}
 				}
 				function send_newsletter(a,b)
 				{
-				answer = confirm("'.$lang_newsletter_send_alert1.'\n"+b+"\n\n'.$lang_newsletter_send_alert2.'")
+				answer = confirm("'.$lang['newsletter_send_alert1'].'\n"+b+"\n\n'.$lang['newsletter_send_alert2'].'")
 				if (answer !=0)
 				{
-				location = "index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=2&nid="+a
+				location = "index.php?a=112&id='.$mod_id.'&p=1&action=2&nid="+a
 				}
 				}
 				//-->
@@ -99,36 +93,36 @@ switch($_GET['p']) {
 				// отчет по логам
 				$list .='
 				<div class="actionMainSend">
-							<a class="but" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=9"><img src="/assets/modules/easynewsletter/images/folder_page_add.png"> Файлы отчетов</a>
+							<a class="but" href="index.php?a=112&id='.$mod_id.'&p=1&action=9"><img src="/assets/modules/easynewsletter/images/folder_page_add.png"> Файлы отчетов</a>
 				</div>';
 				$list .= '
 				<table style="font-size: 12px;" cellspacing="0" width="100%" class="gridSubscribers">';
 				// кнопка создать письмо
-				$menu_add .= '<li><a href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=3"><img src="'.$href.'images/add.png"> '.$lang_newsletter_create.'</a></li>';
+				$menu_add .= '<li><a href="index.php?a=112&id='.$mod_id.'&p=1&action=3"><img src="'.$href.'images/add.png"> '.$lang['newsletter_create'].'</a></li>';
 				$list .= '<tr class="headTR">';
-				$list .= '<th class="gridHeader" width="100"><a href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=1&sortorder=date"><strong>'.$lang_newsletter_date.'</strong></a></td>';
-				$list .= '<th class="gridHeader"><a href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=1&sortorder=subject"><strong>'.$lang_newsletter_subject.'</strong></a></td>';
-				$list .= '<th class="gridHeader"><strong>'.$lang_newsletter_action.'</strong></td>';
+				$list .= '<th class="gridHeader" width="100"><a href="index.php?a=112&id='.$mod_id.'&p=1&action=1&sortorder=date"><strong>'.$lang['newsletter_date'].'</strong></a></td>';
+				$list .= '<th class="gridHeader"><a href="index.php?a=112&id='.$mod_id.'&p=1&action=1&sortorder=subject"><strong>'.$lang['newsletter_subject'].'</strong></a></td>';
+				$list .= '<th class="gridHeader"><strong>'.$lang['newsletter_action'].'</strong></td>';
 				$list .= '</tr>';
 				$i=0;	
 				while($i < $num){		
 					$row = $modx->db->getRow($result);	
 					$list .='<tr>';
 					$list .= '<td>'.mysql_result($result,$i,"date").'</td>';
-					$list .= '<td class="nounder"><a href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=3&nid='.mysql_result($result,$i,"id").'">'.mysql_result($result,$i,"subject").'</a>';
+					$list .= '<td class="nounder"><a href="index.php?a=112&id='.$mod_id.'&p=1&action=3&nid='.mysql_result($result,$i,"id").'">'.mysql_result($result,$i,"subject").'</a>';
 					
 					if (is_array($_SESSION['check-some']))
 							{
-									$list.=' <br> <a class="but" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=2&nid='.mysql_result($result,$i,"id").'&check=1">Отправить письмо выбранным</a>';
+									$list.=' <br> <a class="but" href="index.php?a=112&id='.$mod_id.'&p=1&action=2&nid='.mysql_result($result,$i,"id").'&check=1">Отправить письмо выбранным</a>';
 							}
 					
 					$list.='</td>';
 					// ссылки-действия в списке писем
 					$list .= '<td width="130" align="center">
-					<a class="but roundbut" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=3&nid='.mysql_result($result,$i,"id").'" title="'.$lang_newsletter_edit.'"><img src="'.$href.'images/edit.png"></a> 
-					<a class="but roundbut" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=7&nid='.mysql_result($result,$i,"id").'" title="Отчеты об отправке"><img src="'.$href.'images/cal.gif"></a>
-					<a class="but roundbut" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=2&nid='.mysql_result($result,$i,"id").'" onclick=" send_newsletter(\''.mysql_result($result,$i,"id").'\',\''.mysql_result($result,$i,"subject").'\'); return false;" title="'.$lang_newsletter_send.'"><img src="'.$href.'images/04-1.png"></a>
-					<a class="but roundbut" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=6&nid='.mysql_result($result,$i,"id").'" onclick=" delete_newsletter(\''.mysql_result($result,$i,"id").'\',\''.mysql_result($result,$i,"subject").'\'); return false;" title="'.$lang_newsletter_delete.'"><img src="'.$href.'images/delete.png"></a>
+					<a class="but roundbut" href="index.php?a=112&id='.$mod_id.'&p=1&action=3&nid='.mysql_result($result,$i,"id").'" title="'.$lang['newsletter_edit'].'"><img src="'.$href.'images/edit.png"></a> 
+					<a class="but roundbut" href="index.php?a=112&id='.$mod_id.'&p=1&action=7&nid='.mysql_result($result,$i,"id").'" title="Отчеты об отправке"><img src="'.$href.'images/cal.gif"></a>
+					<a class="but roundbut" href="index.php?a=112&id='.$mod_id.'&p=1&action=2&nid='.mysql_result($result,$i,"id").'" onclick=" send_newsletter(\''.mysql_result($result,$i,"id").'\',\''.mysql_result($result,$i,"subject").'\'); return false;" title="'.$lang['newsletter_send'].'"><img src="'.$href.'images/04-1.png"></a>
+					<a class="but roundbut" href="index.php?a=112&id='.$mod_id.'&p=1&action=6&nid='.mysql_result($result,$i,"id").'" onclick=" delete_newsletter(\''.mysql_result($result,$i,"id").'\',\''.mysql_result($result,$i,"subject").'\'); return false;" title="'.$lang['newsletter_delete'].'"><img src="'.$href.'images/delete.png"></a>
 					</td>';
 					$list .= '</tr>';
 					$i++;
@@ -137,8 +131,8 @@ switch($_GET['p']) {
 				$out .=  '<div class="sectionHeader">Список писем для рассылок</div>
 				<div class="sectionBody">'.$list.'</div>';
 			} else {
-				$out .=  $lang_newsletter_noposts;
-				$menu_add ='<li><a href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=3"><img src="'.$href.'images/add.png"> '.$lang_newsletter_create.'</a></li>';
+				$out .=  $lang['newsletter_noposts'];
+				$menu_add ='<li><a href="index.php?a=112&id='.$mod_id.'&p=1&action=3"><img src="'.$href.'images/add.png"> '.$lang['newsletter_create'].'</a></li>';
 			}
 		} elseif ($_GET['action'] == 2) {
 			// Send newsletter // Отправка письма
@@ -149,7 +143,7 @@ switch($_GET['p']) {
 			$newsletter_subject = mysql_result($result,$i,"subject");
 			$newsletter_newsletter = mysql_result($result,$i,"newsletter");
 			$newsletter_footer = mysql_result($result,$i,"footer");
-			
+			//изменить на выбор почтовика в MODX
 			$sql = "SELECT * FROM $tbl_config WHERE `id` = 1";
 			$result = $modx->db->query($sql);
 			$mailmethod = mysql_result($result,$i,"mailmethod");
@@ -181,7 +175,7 @@ switch($_GET['p']) {
 			}
 			$i=0;
 			$sentsuccess=0;
-			$out .=  '<div class="infoMess">'.$lang_newsletter_sending.'</div>';
+			$out .=  '<div class="infoMess">'.$lang['newsletter_sending'].'</div>';
 			
 			// начинаем запись log файлов
 			$hand = fopen($path."logs/".date('d-m-Y H_i_s').".csv","w");
@@ -216,7 +210,7 @@ switch($_GET['p']) {
 					$mail->AltBody	= $newsletter_newsletter;
 					$mail->AddAddress($eml['email']);
 					if(!$mail->send()) {
-						$out .=  $lang_newsletter_sending_done4;
+						$out .=  $lang['newsletter_sending_done4'];
 						return 'Main mail: ' . $_lang['ef_mail_error'] . $mail->ErrorInfo;
 					} else {
 						$string = ($i+1).";".$eml['email'].";".$eml['firstname']."\n";
@@ -236,7 +230,7 @@ switch($_GET['p']) {
 			$sql = "UPDATE `easynewsletter_newsletter` SET sent=sent+1,dates='".time().';'.$r['dates']."' WHERE id='".(int)$_GET['nid']."'";
 			$modx->db->query($sql);
 			// отчеты об отправки писем
-			$out .=  '<div class="infoMess">'.$lang_newsletter_sending_done1 . $sentsuccess . $lang_newsletter_sending_done2 . $num . $lang_newsletter_sending_done3.'</div>';
+			$out .=  '<div class="infoMess">'.$lang['newsletter_sending_done1'] . $sentsuccess . $lang['newsletter_sending_done2'] . $num . $lang['newsletter_sending_done3'].'</div>';
 			}
 			else
 			{
@@ -259,9 +253,9 @@ switch($_GET['p']) {
 			}
 			
 			$out .=  '<div class="content_">
-					<p>'.$lang_newsletter_edit_header.'</p>
-					<form action="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action='.$action.'" method="post">
-					<b>'.$lang_newsletter_edit_subject.'</b>
+					<p>'.$lang['newsletter_edit_header'].'</p>
+					<form action="index.php?a=112&id='.$mod_id.'&p=1&action='.$action.'" method="post">
+					<b>'.$lang['newsletter_edit_subject'].'</b>
 					<br /><input type="hidden" name="xid" value="'.$nid.'">
 					<input type="text" size="50" maxlength="250" name="subject" value="'.$subject.'">
 					<br /><br />';
@@ -278,28 +272,28 @@ switch($_GET['p']) {
 			$rte_html = renderFormElement('richtext', 'mailMessage', '', '', $newsletter);
 			$out .=  $rte_html;
 			$out .=  $editor_html;
-			$out .=   '<button class="but" type="submit" name="edit"  value="'.$lang_newsletter_edit_save.'"><img src="'.$href.'images/add.png"> '.$lang_newsletter_edit_save.'</button>
+			$out .=   '<button class="but" type="submit" name="edit"  value="'.$lang['newsletter_edit_save'].'"><img src="'.$href.'images/add.png"> '.$lang['newsletter_edit_save'].'</button>
 			</div>';
 	} 
 	elseif ($_GET['action'] == 4) { 
 		// Insert newsletter into database
 		$sql = "INSERT INTO easynewsletter_newsletter VALUES('', now(), '','', '', '".$modx->db->escape($_POST['subject'])."', '".$modx->db->escape($_POST['tvmailMessage'])."', '','') ";
 		$result = $modx->db->query($sql);
-		header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=1');
+		header ('Location:index.php?a=112&id='.$mod_id.'&p=1&action=1');
 	} 
 	elseif ($_GET['action'] == 5) {
 		// Обновление письма
 		// замена адресов на абсолютные
 		$sql = "UPDATE easynewsletter_newsletter SET subject='".$_POST['subject']."', newsletter='".$modx->db->escape($_POST['tvmailMessage'])."' WHERE id='".$_POST['xid']."'";
 		$result = $modx->db->query($sql);
-		header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=1');
+		header ('Location:index.php?a=112&id='.$mod_id.'&p=1&action=1');
 		print_r ($_POST);
 	} 
 	elseif ($_GET['action'] == 6) {
 		// удаление
 		$sql = "DELETE FROM easynewsletter_newsletter WHERE id='".$_GET['nid']."'";
 		$result = $modx->db->query($sql);
-		header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=1');
+		header ('Location:index.php?a=112&id='.$mod_id.'&p=1&action=1');
 	} 
 	elseif ($_GET['action'] == 7) 
 	{
@@ -421,7 +415,7 @@ switch($_GET['p']) {
 						'".$s[8]."')";
 						if($modx->db->query($sql))
 						{
-							header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
+							header ('Location:index.php?a=112&id='.$mod_id.'&action=1');
 						}
 						
 					}
@@ -430,16 +424,16 @@ switch($_GET['p']) {
 			elseif($_GET['delfile'])
 			{
 				unlink ($folder.$_GET['delfile']);
-				header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=8');
+				header ('Location:index.php?a=112&id='.$mod_id.'&p=1&action=8');
 			}
 			$out .='<div class="actionMainSend"><ul class="bckp_list">';
 			foreach ($dirList as $file)
 			{
 				$file = iconv("cp1251","utf-8", $file);
 				$out .='<li>
-				<a href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=8&restorefile='.$file.'" class="but roundbut" style="float:left; margin-left:4px"><img src="'.$href.'images/clock_play.png"></a>
+				<a href="index.php?a=112&id='.$mod_id.'&p=1&action=8&restorefile='.$file.'" class="but roundbut" style="float:left; margin-left:4px"><img src="'.$href.'images/clock_play.png"></a>
 				<div>'.$file.'</div> 
-				<a href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=8&delfile='.$file.'" class="but roundbut"><img src="'.$href.'images/delete.png"></a>
+				<a href="index.php?a=112&id='.$mod_id.'&p=1&action=8&delfile='.$file.'" class="but roundbut"><img src="'.$href.'images/delete.png"></a>
 				</li>';
 			}
 			$out .='</ul></div>';
@@ -472,28 +466,28 @@ switch($_GET['p']) {
 			$result = $modx->db->query($sql);
 			$mailmethod = mysql_result($result,$i,"mailmethod");
 			$auth = mysql_result($result,$i,"auth");
-			$list = '<div class="sectionHeader">'.$lang_config_header.'</div><div class="content_">
-					<form action="index.php?a=112&id='.$_REQUEST['id'].'&p=2&action=2" method="post" class="comon_settings"><b>';
+			$list = '<div class="sectionHeader">'.$lang['config_header'].'</div><div class="sectionBody">
+					<form action="index.php?a=112&id='.$mod_id.'&p=2&action=2" method="post" class="comon_settings"><b>';
 			$list .= '<table style="margin-top:10px; font-size: 12px;" class="grid" width="100%">';
 			
 			$list .= '
 			<tr>
-				<td><strong>'.$lang_config_sendername.'</strong></td>
+				<td><strong>'.$lang['config_sendername'].'</strong></td>
 				<td><input type="text" size="100" maxlength="100" name="sendername" value="'.stripslashes(mysql_result($result,$i,"sendername")).'"></input>
-				<span class="descr">'.$lang_config_sendername_description.'</span>
+				<span class="descr">'.$lang['config_sendername_description'].'</span>
 				</td>
 			</tr>';
 			$list .= '
 			<tr>
-				<td><strong>'.$lang_config_senderemail.'</strong></td>
+				<td><strong>'.$lang['config_senderemail'].'</strong></td>
 				<td><input type="text" size="100" maxlength="100" name="senderemail" value="'.mysql_result($result,$i,"senderemail").'"></input>
-				<span class="descr">'.$lang_config_senderemail_description.'</span>
+				<span class="descr">'.$lang['config_senderemail_description'].'</span>
 				</td>
 			</tr>';
 			
 			$list .= '
 			<tr>
-				<td><strong>'.$lang_config_mail.'</strong></td>
+				<td><strong>'.$lang['config_mail'].'</strong></td>
 				<td><select name="mailmethod">';
 
 			if($mailmethod == 'IsMail'){$dropdown = ' selected="selected"';} else {$dropdown = '';}
@@ -509,70 +503,39 @@ switch($_GET['p']) {
 			$list .= '<option value="IsQmail"'.$dropdown.'>Qmail MTA</option>';
 	
 			$list .= '</select>
-				<span class="descr">'.$lang_config_mail_description.'</span>
+				<span class="descr">'.$lang['config_mail_description'].'</span>
 				</td>
 			</tr>';
 
 			$list .= '
 			<tr>
-				<td><strong>'.$lang_config_auth.'</strong></td>
+				<td><strong>'.$lang['config_auth'].'</strong></td>
 				<td><select name="auth">';
 
 			if($auth == 'true'){$dropdown3 = ' selected="selected"';} else {$dropdown3 = '';}
-			$list .= '<option value="true"'.$dropdown3.'>'.$lang_config_true.'</option>';
+			$list .= '<option value="true"'.$dropdown3.'>'.$lang['config_true'].'</option>';
 
 			if($auth == 'false'){$dropdown3 = ' selected="selected"';} else {$dropdown3 = '';}
-			$list .= '<option value="false"'.$dropdown3.'>'.$lang_config_false.'</option>';
+			$list .= '<option value="false"'.$dropdown3.'>'.$lang['config_false'].'</option>';
 			
 			$list .= '</select>
-			<span class="descr">'.$lang_config_auth_description.'</span></td></tr>';
+			<span class="descr">'.$lang['config_auth_description'].'</span></td></tr>';
 
-			$list .= '<tr><td><strong>'.$lang_config_smtp.'</strong></td><td>: <input type="text" size="100" maxlength="100" name="smtp" value="'.mysql_result($result,$i,"smtp").'"></input></td></tr>';
-			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang_config_smtp_description.'</td></tr>';
-			$list .= '<tr><td><strong>'.$lang_config_authuser.'</strong></td><td>: <input type="text" size="100" maxlength="100" name="authuser" value="'.mysql_result($result,$i,"authuser").'"></input></td></tr>';
-			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang_config_authuser_description.'</td></tr>';
-			$list .= '<tr><td><strong>'.$lang_config_authpassword.'</strong></td><td>: <input type="password" size="100" maxlength="100" name="authpassword" value="'.mysql_result($result,$i,"authpassword").'"></input></td></tr>';
-			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang_config_authpassword_description.'</td></tr>';
-			// -------------------------------------------------		
-			$list .= '<tr><td><strong>'.$lang_config_lang_website.'</strong></td><td>: <select name="lang_frontend">';
-			if(mysql_result($result,$i,"lang_frontend") == 'english'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="english"'.$dropdown2.'>English</option>';
+			$list .= '<tr><td><strong>'.$lang['config_smtp'].'</strong></td><td>: <input type="text" size="100" maxlength="100" name="smtp" value="'.mysql_result($result,$i,"smtp").'"></input></td></tr>';
+			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang['config_smtp_description'].'</td></tr>';
+			$list .= '<tr><td><strong>'.$lang['config_authuser'].'</strong></td><td>: <input type="text" size="100" maxlength="100" name="authuser" value="'.mysql_result($result,$i,"authuser").'"></input></td></tr>';
+			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang['config_authuser_description'].'</td></tr>';
+			$list .= '<tr><td><strong>'.$lang['config_authpassword'].'</strong></td><td>: <input type="password" size="100" maxlength="100" name="authpassword" value="'.mysql_result($result,$i,"authpassword").'"></input></td></tr>';
+			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang['config_authpassword_description'].'</td></tr>';
 			
-			if(mysql_result($result,$i,"lang_frontend") == 'russian'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="russian"'.$dropdown2.'>Русский</option>';
-			
-			if(mysql_result($result,$i,"lang_frontend") == 'danish'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="danish"'.$dropdown2.'>Dansk</option>';
-			if(mysql_result($result,$i,"lang_frontend") == 'italian'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="italian"'.$dropdown2.'>Italiano</option>';
-			if(mysql_result($result,$i,"lang_frontend") == 'german'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="german"'.$dropdown2.'>Deutsch</option>';
-			$list .= '</select></td></tr>';
-			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang_config_lang_website_description.'</td></tr>';
-
-			$list .= '<tr><td><strong>'.$lang_config_lang_manager.'</strong></td><td>: <select name="lang_backend">';			
-			if(mysql_result($result,$i,"lang_backend") == 'english'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="english"'.$dropdown2.'>English</option>';
-			
-			if(mysql_result($result,$i,"lang_backend") == 'russian'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="russian"'.$dropdown2.'>Русский</option>';
-			
-			if(mysql_result($result,$i,"lang_backend") == 'danish'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="danish"'.$dropdown2.'>Dansk</option>';
-			if(mysql_result($result,$i,"lang_backend") == 'italian'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="italian"'.$dropdown2.'>Italiano</option>';
-			if(mysql_result($result,$i,"lang_backend") == 'german'){$dropdown2 = ' selected="selected"';} else {$dropdown2 = '';}
-			$list .= '<option value="german"'.$dropdown2.'>Deutsch</option>';
-			$list .= '</select></td></tr>';
-			$list .= '<tr><td>&nbsp;</td><td>&nbsp;&nbsp;'.$lang_config_lang_manager_description.'</td></tr>';
 			$list .= '</table>';
-			$list .= '<button type="submit" class="but" value="'.$lang_config_save.'"><img src="'.$href.'images/save.png"> '.$lang_config_save.'</button>';
+			$list .= '<button type="submit" class="but" value="'.$lang['config_save'].'"><img src="'.$href.'images/save.png"> '.$lang['config_save'].'</button>';
 			$out .=  $list;
 		} elseif ($_GET['action'] == 2) {
 			// Update configuration
 			$sql = "UPDATE easynewsletter_config SET mailmethod='".$_POST['mailmethod']."', smtp='".$_POST['smtp']."', auth='".$_POST['auth']."', authuser='".$_POST['authuser']."', authpassword='".$_POST['authpassword']."', sendername='".addslashes($_POST['sendername'])."', senderemail='".$_POST['senderemail']."', lang_frontend='".$_POST['lang_frontend']."', lang_backend='".$_POST['lang_backend']."' WHERE id='1'";	
 			$result = $modx->db->query($sql);
-			header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&p=2&action=1');
+			header ('Location:index.php?a=112&id='.$mod_id.'&p=2&action=1');
 		}
 	break;
 	// sazanof added import section
@@ -616,8 +579,8 @@ switch($_GET['p']) {
 						$out .='<div class="predpr">';
 						$out .= '<b>№ '.($i+1).'</b><br>';
 						$out .= '<b>Email</b>: '.$d[($_POST['email_import'] - 1)].'<br>';
-						$out .= '<b>'.$lang_subscriber_firstname.'</b>: '.$d[($_POST['name_import'] - 1)].'<br>';
-						$out .= '<b>'.$lang_subscriber_lastname.'</b>: '.$d[($_POST['lastname_import'] - 1)];	
+						$out .= '<b>'.$lang['subscriber_firstname'].'</b>: '.$d[($_POST['name_import'] - 1)].'<br>';
+						$out .= '<b>'.$lang['subscriber_lastname'].'</b>: '.$d[($_POST['lastname_import'] - 1)];	
 						
 						// проверка на повторение записей
 						$chk = "SELECT * FROM $tbl_sbscr WHERE email='".$d[($_POST['email_import'] - 1)]."'";
@@ -641,7 +604,7 @@ switch($_GET['p']) {
 			}
 			else
 			{
-				$err=$lang_import_not_choose;
+				$err=$lang['import_not_choose'];
 			}
 			
 		}
@@ -663,20 +626,20 @@ switch($_GET['p']) {
 		// загрузка файла
 		$importForm = 		
 		'	<input type="hidden" value="" name="get_out">
-			<fieldset><legend>'.$lang_import_upltxt.'</legend>
+			<fieldset><legend>'.$lang['import_upltxt'].'</legend>
 			<div class="upload_info">Откройте файл csv в Microsoft Excel и впишите в поля номера колонок Email, Имя и Фамилия </div>
 			<input type="text" name="email_import" value="'.$_POST['email_import'].'" placeholder="№ Email"> - 
-			<input type="text" name="name_import" value="'.$_POST['name_import'].'" placeholder="№ '.$lang_subscriber_firstname.'"> - 
-			<input type="text" name="lastname_import" value="'.$_POST['lastname_import'].'" placeholder="№ '.$lang_subscriber_lastname.'"><br>
-			<b>'.$lang_import_exclude.'</b><br>
-			<input type="text" name="exclude" value="'.$_POST['exclude'].'" placeholder="1,2,3,7">
+			<input type="text" name="name_import" value="'.$_POST['name_import'].'" placeholder="№ '.$lang['subscriber_firstname'].'"> - 
+			<input type="text" name="lastname_import" value="'.$_POST['lastname_import'].'" placeholder="№ '.$lang['subscriber_lastname'].'"><br>
+			<b>'.$lang['import_exclude'].'</b><br>
+			<input type="text" name="exclude" value="'.$_POST['exclude'].'" placeholder="1,2,3">
 			'.$categories.'
 			<div class="upload_info">Инфа о том, как загружать</div>
 			<input type="file" name="file-import"></fieldset>
-			<button class="but" type="submit" value="'.$lang_import_sub.'" name="sub_import"><img src="'.$href.'images/39.png"> '.$lang_import_sub.'</button>
+			<button class="but" type="submit" value="'.$lang['import_sub'].'" name="sub_import"><img src="'.$href.'images/39.png"> '.$lang['import_sub'].'</button>
 		</form>';
 		
-		$out .= '<div class="sectionHeader">'.$lang_import_title.'</div>';
+		$out .= '<div class="sectionHeader">'.$lang['import_title'].'</div>';
 		$out .= '<div class="sectionBody">';
 		$out .= $importForm;
 		$out .='</div>';
@@ -702,9 +665,9 @@ switch($_GET['p']) {
 			<td>".$kat['kat_title']."</td>
 			<td>".$kat['kat_descr']."</td>
 			<td>
-			<a href='index.php?a=112&id=".$_REQUEST['id']."&p=4&edit=".$kat['id']."'>Ред.</a> 
+			<a href='index.php?a=112&id=".$mod_id."&p=4&edit=".$kat['id']."'>Ред.</a> 
 			| 
-			<a href='index.php?a=112&id=".$_REQUEST['id']."&p=4&del=".$kat['id']."'>Уд.</a>
+			<a href='index.php?a=112&id=".$mod_id."&p=4&del=".$kat['id']."'>Уд.</a>
 			</td>
 		</tr>";
 		$i++;
@@ -731,7 +694,7 @@ switch($_GET['p']) {
 	{
 		$sql="DELETE FROM $tbl_kat WHERE id='".(int)$_GET['del']."'";
 		$modx->db->query($sql);
-		header('Location:index.php?a=112&id='.$_REQUEST['id'].'&p=4');
+		header('Location:index.php?a=112&id='.$mod_id.'&p=4');
 	}
 	// добавление новой категории
 	else
@@ -788,11 +751,11 @@ switch($_GET['p']) {
 				{
 				$out .= '<div class="content_">
 					<fieldset>
-					<legend>'.$lang_subscriber_add_header.'</legend>
-					<form action="index.php?a=112&id='.$_REQUEST['id'].'&action=5" method="post">
-					<b>'.$lang_subscriber_firstname.'</b><br /><input type="text" size="50" maxlength="50" name="firstname" value=""></input><br />
-					<b>'.$lang_subscriber_lastname.'</b><br /><input type="text" size="50" maxlength="50" name="lastname" value=""></input><br />
-					<b>'.$lang_subscriber_email.'</b><br /><input type="text" size="50" maxlength="50" name="email" value=""></input><br />';
+					<legend>'.$lang['subscriber_add_header'].'</legend>
+					<form action="index.php?a=112&id='.$mod_id.'&action=5" method="post">
+					<b>'.$lang['subscriber_firstname'].'</b><br /><input type="text" size="50" maxlength="50" name="firstname" value=""></input><br />
+					<b>'.$lang['subscriber_lastname'].'</b><br /><input type="text" size="50" maxlength="50" name="lastname" value=""></input><br />
+					<b>'.$lang['subscriber_email'].'</b><br /><input type="text" size="50" maxlength="50" name="email" value=""></input><br />';
 					$out .='<b>Категория:</b><br>
 					<select name="kategory_id" style="width:357px">
 					<option>Без категории</option>
@@ -804,19 +767,19 @@ switch($_GET['p']) {
 										$out.='>'.$kat['kat_title'].'</option>';
 								}
 					$out.='</select><br>';
-					$out.='<button class="but" type="submit" value="'.$lang_subscriber_edit_save.'" name="add"><img src="'.$href.'images/add.png"> '.$lang_subscriber_edit_save.'</button>
+					$out.='<button class="but" type="submit" value="'.$lang['subscriber_edit_save'].'" name="add"><img src="'.$href.'images/add.png"> '.$lang['subscriber_edit_save'].'</button>
 					</fieldset>
 					</div>';
 				}
 				else
 				{
 					$out .= '<div class="content_">
-					<p>'.$lang_subscriber_add_header.'</p>
-					<form action="index.php?a=112&id='.$_REQUEST['id'].'&action=5" method="post">
-					<b>'.$lang_subscriber_firstname.'</b><br /><input type="text" size="50" maxlength="50" name="firstname" value="'.mysql_result($result,$i,"firstname").'"></input><br />
-					<b>'.$lang_subscriber_lastname.'</b><br /><input type="text" size="50" maxlength="50" name="lastname" value="'.mysql_result($result,$i,"lastname").'"></input><br />
-					<b>'.$lang_subscriber_email.'</b><br /><input type="text" size="50" maxlength="50" name="email" value="'.mysql_result($result,$i,"email").'"></input><br /><br />
-					<button class="but" type="submit" value="'.$lang_subscriber_edit_save.'" name="add"><img src="'.$href.'images/add.png"> '.$lang_subscriber_edit_save.'</button></div>';
+					<p>'.$lang['subscriber_add_header'].'</p>
+					<form action="index.php?a=112&id='.$mod_id.'&action=5" method="post">
+					<b>'.$lang['subscriber_firstname'].'</b><br /><input type="text" size="50" maxlength="50" name="firstname" value="'.mysql_result($result,$i,"firstname").'"></input><br />
+					<b>'.$lang['subscriber_lastname'].'</b><br /><input type="text" size="50" maxlength="50" name="lastname" value="'.mysql_result($result,$i,"lastname").'"></input><br />
+					<b>'.$lang['subscriber_email'].'</b><br /><input type="text" size="50" maxlength="50" name="email" value="'.mysql_result($result,$i,"email").'"></input><br /><br />
+					<button class="but" type="submit" value="'.$lang['subscriber_edit_save'].'" name="add"><img src="'.$href.'images/add.png"> '.$lang['subscriber_edit_save'].'</button></div>';
 				}
 			}
 			// удаление выбранных подписчиков
@@ -867,15 +830,15 @@ switch($_GET['p']) {
 				{
 					if ((int)$_POST['filter'])
 					{
-						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1&cat='.$_POST['filter']);
+						header('Location:index.php?a=112&id='.$mod_id.'&action=1&cat='.$_POST['filter']);
 					}
 					elseif ($_POST['filter']=='all')
 					{
-						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
+						header('Location:index.php?a=112&id='.$mod_id.'&action=1');
 					}
 					elseif ($_POST['filter']=='0')
 					{
-						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1&cat=0');
+						header('Location:index.php?a=112&id='.$mod_id.'&action=1&cat=0');
 					}
 				}
 				$limit = 20;
@@ -887,7 +850,7 @@ switch($_GET['p']) {
 				{
 					$_GET['page']=1;
 					$start =0;
-					//header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1&page=1');
+					//header('Location:index.php?a=112&id='.$mod_id.'&action=1&page=1');
 				}
 				if ((int)$_GET['cat'])
 				{
@@ -905,10 +868,10 @@ switch($_GET['p']) {
 					<!--
 					function delete_subscriber(a,b,c,d)
 					{
-					answer = confirm("'.$lang_subscriber_delete_alert.'\n"+b+" "+c+" - "+d)
+					answer = confirm("'.$lang['subscriber_delete_alert'].'\n"+b+" "+c+" - "+d)
 					if (answer !=0)
 					{
-					location = "index.php?a=112&id='.$_REQUEST['id'].'&action=4&nid="+a
+					location = "index.php?a=112&id='.$mod_id.'&action=4&nid="+a
 					}
 					}
 					//-->
@@ -918,7 +881,7 @@ switch($_GET['p']) {
 						Список подписчиков, зарегистрированных в системе
 					</div>
 					<div class="sectionBody">
-					<form method="post" name="s_list" id="s_list" action="index.php?a=112&id='.$_REQUEST['id'].'&action=1">
+					<form method="post" name="s_list" id="s_list" action="index.php?a=112&id='.$mod_id.'&action=1">
 					
 					<div class="actionMainSend">
 							<button class="but" name="add-sub" value="add"><img src="'.$href.'images/add.png"> Добавить подписчика</button>
@@ -929,7 +892,7 @@ switch($_GET['p']) {
 									<div>Для удаления отложенных адресов нажмите на эту кнопку</div>
 								</button>';
 							}
-							$list.='<a class="but nounder" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=8" name="to-export" value="1"><img src="'.$href.'images/save.png"> Экспорт/Бэкап</a>';
+							$list.='<a class="but nounder" href="index.php?a=112&id='.$mod_id.'&p=1&action=8" name="to-export" value="1"><img src="'.$href.'images/save.png"> Экспорт/Бэкап</a>';
 							$sql = "SELECT id,kat_title FROM $tbl_kat";
 							$list.='<div class="actButs add-form"  style="display:none">
 							<select name="filter_all">
@@ -958,6 +921,7 @@ switch($_GET['p']) {
 					$list .='
 					
 					<div class="actionMainSendRight">
+							<input type="text" id="email_filter" value="" placeholder="Фильтр по email">
 							<select name="filter">
 								<option value="all">Все</option>
 								<option value="0"';
@@ -992,6 +956,7 @@ switch($_GET['p']) {
 						<button class="but" name="del-some" value="some"><img src="'.$href.'images/error.png" style="top:2px; position:relative; margin-right:5px" height="13"> Удалить выбранные</button>
 						<button class="but" name="del-all" value="all"><img src="'.$href.'images/cancel.png" style="top:2px; position:relative; margin-right:5px" height="13"> Удалить все</button>
 					</div>
+					<div id="result"></div>
 					<table style="font-size: 12px;" cellspacing="0" width="100%" class="gridSubscribers">';
 					$list .= '<tr class="headTR">';
 					$list .= '
@@ -999,10 +964,10 @@ switch($_GET['p']) {
 					<label><input type="checkbox" id="check_all"></label>  
 					<b>№ / id</b>
 					</th>
-					<th class="gridHeader" align="left"><a href="index.php?a=112&id='.$_REQUEST['id'].'&action=1&sortorder=email"><strong>'.$lang_subscriber_email.'</strong></a></th>
-					<th class="gridHeader" align="left"><a href="index.php?a=112&id='.$_REQUEST['id'].'&action=1&sortorder=firstname"><strong>'.$lang_subscriber_firstname.'</strong></a></th>
-					<th class="gridHeader" align="left"><a href="index.php?a=112&id='.$_REQUEST['id'].'&action=1&sortorder=lastname"><strong>'.$lang_subscriber_lastname.'</strong></a></th>					
-					<th class="gridHeader">'.$lang_subscriber_action.'</th>
+					<th class="gridHeader" align="left"><a href="index.php?a=112&id='.$mod_id.'&action=1&sortorder=email"><strong>'.$lang['subscriber_email'].'</strong></a></th>
+					<th class="gridHeader" align="left"><a href="index.php?a=112&id='.$mod_id.'&action=1&sortorder=firstname"><strong>'.$lang['subscriber_firstname'].'</strong></a></th>
+					<th class="gridHeader" align="left"><a href="index.php?a=112&id='.$mod_id.'&action=1&sortorder=lastname"><strong>'.$lang['subscriber_lastname'].'</strong></a></th>					
+					<th class="gridHeader">'.$lang['subscriber_action'].'</th>
 					<th class="gridHeader" align="center" width="130">Отправлено</th>
 					';
 					$list .= '</tr>';
@@ -1041,8 +1006,8 @@ switch($_GET['p']) {
 						<td class="row">'.mysql_result($result,$i,"firstname").'&nbsp;</td>
 						<td class="row">'.mysql_result($result,$i,"lastname").'&nbsp;</td>						
 						<td class="row" align="center" width="100" align="center">
-								<a class="but roundbut" href="index.php?a=112&id='.$_REQUEST['id'].'&action=2&nid='.mysql_result($result,$i,"id").'"><img src="'.$href.'images/edit.png" height="13"></a>
-								<a class="but roundbut" href="index.php?a=112&id='.$_REQUEST['id'].'&action=4&nid='.mysql_result($result,$i,"id").'" onclick=" delete_subscriber(\''.mysql_result($result,$i,"id").'\',\''.mysql_result($result,$i,"firstname").'\',\''.mysql_result($result,$i,"lastname").'\',\''.mysql_result($result,$i,"email").'\'); return false;"><img src="'.$href.'images/cancel.png"></a>		
+								<a class="but roundbut" href="index.php?a=112&id='.$mod_id.'&action=2&nid='.mysql_result($result,$i,"id").'"><img src="'.$href.'images/edit.png" height="13"></a>
+								<a class="but roundbut" href="index.php?a=112&id='.$mod_id.'&action=4&nid='.mysql_result($result,$i,"id").'" onclick=" delete_subscriber(\''.mysql_result($result,$i,"id").'\',\''.mysql_result($result,$i,"firstname").'\',\''.mysql_result($result,$i,"lastname").'\',\''.mysql_result($result,$i,"email").'\'); return false;"><img src="'.$href.'images/cancel.png"></a>		
 						</td>
 						<td class="row"><small>';
 						if(mysql_result($result,$i,"lastnewsletter")!=='')
@@ -1063,10 +1028,10 @@ switch($_GET['p']) {
 					$lastpage = ceil($total/$limit);
 					if ((int)$_GET['page']>$lastpage)
 					{
-						header('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
+						header('Location:index.php?a=112&id='.$mod_id.'&action=1');
 					}
 					$list .= '<div class="pagination">';
-					$list .= '<a id="next" href="index.php?a=112&id='.$_REQUEST['id'].'&action=1';
+					$list .= '<a id="next" href="index.php?a=112&id='.$mod_id.'&action=1';
 					if ((int)$_GET['cat'])
 					{
 						$list.='&cat='.(int)$_GET['cat'];
@@ -1082,12 +1047,12 @@ switch($_GET['p']) {
 				/// если нет подписчиков
 					$out .=
 					'<div class="sectionBody">
-					<form method="post" action="index.php?a=112&id='.$_REQUEST['id'].'&action=1">
+					<form method="post" action="index.php?a=112&id='.$mod_id.'&action=1">
 					
 					<div align="center">
 					<div style="text-align:center; margin:10px"><img src="'.$href.'images/about.jpg"></div>
 					<button class="but" name="add-sub" value="add"><img src="'.$href.'images/add.png" style="top:2px; position:relative; margin-right:5px" height="13"> Добавите сюда вашего первого подписчика</button>
-					<a class="but nounder" href="index.php?a=112&id='.$_REQUEST['id'].'&p=1&action=8" name="to-export" value="1"><img src="'.$href.'images/save.png"> Восстановление существующей базы</a>
+					<a class="but nounder" href="index.php?a=112&id='.$mod_id.'&p=1&action=8" name="to-export" value="1"><img src="'.$href.'images/save.png"> Восстановление существующей базы</a>
 					</div>
 					<div class="actButs">
 						<button class="but" name="del-some" value="some"><img src="'.$href.'images/error.png" style="top:2px; position:relative; margin-right:5px" height="13"> Удалить выбранные</button>
@@ -1115,11 +1080,11 @@ switch($_GET['p']) {
 			$result = $modx->db->query($sql);
 			$out .= '<div class="content_">
 					<fieldset>
-					<legend>'.$lang_subscriber_edit_header.'</legend>
+					<legend>'.$lang['subscriber_edit_header'].'</legend>
 					<form action="" method="post">
-					<b>'.$lang_subscriber_firstname.'</b><br /><input type="text" size="50" maxlength="50" name="firstname" value="'.mysql_result($result,$i,"firstname").'"></input><br />
-					<b>'.$lang_subscriber_lastname.'</b><br /><input type="text" size="50" maxlength="50" name="lastname" value="'.mysql_result($result,$i,"lastname").'"></input><br />
-					<b>'.$lang_subscriber_email.'</b><br /><input type="text" size="50" maxlength="50" name="email" value="'.mysql_result($result,$i,"email").'"></input><br />';
+					<b>'.$lang['subscriber_firstname'].'</b><br /><input type="text" size="50" maxlength="50" name="firstname" value="'.mysql_result($result,$i,"firstname").'"></input><br />
+					<b>'.$lang['subscriber_lastname'].'</b><br /><input type="text" size="50" maxlength="50" name="lastname" value="'.mysql_result($result,$i,"lastname").'"></input><br />
+					<b>'.$lang['subscriber_email'].'</b><br /><input type="text" size="50" maxlength="50" name="email" value="'.mysql_result($result,$i,"email").'"></input><br />';
 					$out .='<b>Категория</b><br>
 					<select name="kategory_id" style="width:357px">
 					<option>Без категории</option>';
@@ -1134,13 +1099,13 @@ switch($_GET['p']) {
 										$out.='>'.$kat['kat_title'].'</option>';
 								}
 					$out.='</select><br>';
-					$out.='<button class="but" type="submit" name="upd_s" value="'.$lang_subscriber_edit_save.'"><img src="'.$href.'images/add.png"> '.$lang_subscriber_edit_save.'</button></form></fieldset></div>';
+					$out.='<button class="but" type="submit" name="upd_s" value="'.$lang['subscriber_edit_save'].'"><img src="'.$href.'images/add.png"> '.$lang['subscriber_edit_save'].'</button></form></fieldset></div>';
 		}
 		elseif ($_GET['action'] == 4) {
 			// Delete subscriber
 			$sql = "DELETE FROM $tbl_sbscr WHERE id='".$_GET['nid']."'";
 			$result = $modx->db->query($sql);
-			$out .=  $lang_subscriber_edit_delete;
+			$out .=  $lang['subscriber_edit_delete'];
 		}
 		elseif ($_GET['action']==5)
 		{
@@ -1159,7 +1124,7 @@ switch($_GET['p']) {
 						{
 							$sql = "INSERT INTO $tbl_sbscr VALUES (NULL, '".$_POST['firstname']."', '".$_POST['lastname']."', '".$_POST['email']."', '', '', '', now(),'".$_POST['kategory_id']."') ";
 							$modx->db->query($sql);
-							header ('Location:index.php?a=112&id='.$_REQUEST['id'].'&action=1');
+							header ('Location:index.php?a=112&id='.$mod_id.'&action=1');
 						}
 					}
 					else
