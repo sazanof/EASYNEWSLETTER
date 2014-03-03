@@ -10,9 +10,21 @@ function msqlResultRow ($sql,$field)
 	$res = $modx->db->getRow($modx->db->query($sql));
 	return $res[$field];
 }
-$sql = "SELECT * FROM `easynewsletter_config` WHERE `id` = 1";
-$result = $modx->db->query($sql);
-include('assets/modules/easynewsletter/languages/'.msqlResultRow($sql,"lang_frontend").'.php');
+$path = MODX_BASE_PATH.'/assets/modules/easynewsletter/';
+$manager_language = $modx->config['manager_language'];
+if ($modx->getLoginUserID()) {
+    $sql = "SELECT setting_name, setting_value FROM " . $modx->getFullTableName('user_settings') . " WHERE setting_name='manager_language' AND user=" . $modx->getLoginUserID();
+    $rs = $modx->db->query($sql);
+    if ($modx->db->getRecordCount($rs) > 0) {
+        $row = $modx->db->getRow($rs);
+        $manager_language = $row['setting_value'];
+    }
+}
+if (file_exists($path.'languages/' . $manager_language . '.php')) {
+    include($path.'languages/' . $manager_language . '.php');
+} else {
+    include($path.'languages/' . 'lang/english.php');
+}
 error_reporting(E_ALL ^ E_NOTICE);
 
 $action = $_POST['option'];
@@ -21,11 +33,11 @@ $cat_id = isset($cat_id) ? $cat_id : 0;
 
 if ($mode == 'subscribe')
 {
-	$subscribe_button = $lang_subscribe;
+	$subscribe_button = $lang['subscribe'];
 }
 elseif ($mode=='unsubscribe')
 {
-	$subscribe_button = $lang_unsubscribe;
+	$subscribe_button = $lang['unsubscribe'];
 }
 $tpl = isset($tpl) ? $modx->getChunk($tpl) : '
 <div class="infos_subscr">
@@ -60,17 +72,17 @@ if ($_POST['hid']=='' and trim($_POST['email'])!=='')
 				{				
 					if ($modx->db->query($sql))
 					{
-						$infos[] = $lang_subscribesuccess;
+						$infos[] = $lang['subscribesuccess'];
 					}
 				}
 				else
 				{
-					$infos[] = $lang_infos_firstname;
+					$infos[] = $lang['infos_firstname'];
 				}
 		 } 
 		else 
 		{
-				$infos[] = $lang_alreadysubscribed;
+				$infos[] = $lang['alreadysubscribed'];
 		}
   }
 	break;
@@ -86,7 +98,7 @@ case "unsubscribe":
 			$email = $_POST['email'];
 			$sql = "DELETE FROM easynewsletter_subscribers WHERE email = '".$email."'";
 			$result = $modx->db->query($sql);
-			$infos[] = $lang_unsubscribesuccess;
+			$infos[] = $lang['unsubscribesuccess'];
 		}
 	}
 	break;  	
@@ -103,9 +115,10 @@ if (!empty($infos))
 }
 $modx->setPlaceholder('mode',$mode);
 $modx->setPlaceholder('subscribe_button',$subscribe_button);
-$modx->setPlaceholder('lang_firstname',$lang_firstname);
-$modx->setPlaceholder('lang_lastname',$lang_lastname);
-$modx->setPlaceholder('lang_email',$lang_email);
+$modx->setPlaceholder('lang_firstname',$lang['firstname']);
+$modx->setPlaceholder('lang_lastname',$lang['lastname']);
+$modx->setPlaceholder('lang_email',$lang['email']);
 $modx->setPlaceholder('infos',$mes_wr);
 $out .= $tpl;
+return $out;
 ?>
