@@ -1,4 +1,3 @@
-<?php
 /**
  * EasyNewsletter 1.0
  *
