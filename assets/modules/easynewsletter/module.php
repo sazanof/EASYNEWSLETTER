@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 Easy Newsletter 1.0
 Copyright by: Flux - www.simpleshop.dk
