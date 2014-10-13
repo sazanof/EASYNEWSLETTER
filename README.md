@@ -5,6 +5,9 @@ EASYNEWSLETTER
 
 ![alt text](http://sazanof.ru/assets/images/enl/modx_easyNL.jpg "MODX EASYNEWSLETTER")
 
+UPD 13.10.2014
+I'm back =)
+
 UPD 13.02.2014
 ==================
 	
