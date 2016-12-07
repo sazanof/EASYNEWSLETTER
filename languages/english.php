@@ -3,7 +3,7 @@
 # Created by: Flux
 # Language: English
 # ------------------------------------------------------------------------
-$lang['title'] = "модуль управления рассылкой для MODx Evolution";
+$lang['title'] = "The Module =) управления рассылкой для MODx Evolution";
 $lang['links_subscribers'] = "Subscribers";
 $lang['links_newsletter'] = "Newsletter";
 $lang['links_configuration'] = "Configuration";

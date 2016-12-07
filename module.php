@@ -1,51 +1,5 @@
 <?php
-/*
-Easy Newsletter 1.0
-Copyright by: Flux - www.simpleshop.dk
-Update by: Sazanof - www.sazanof.ru
-Date: 30.01 2014
-Notes: This newsletter system is heavily inspired by KoopsmailinglistX so a bow in respect and appreciation to the original author Jasper Koops and sottwell@sottwell.com who ported it to MODx.
-
----------------------------------------------------------------------
-This file is part of Easy Newsletter 1.0
-
-Easy Newsletter 1.0 is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 3 of the License, or
-(at your option) any later version.
-
-Easy Newsletter 1.0 is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>. 
-
----------------------------------------------------------------------
-UPD май 2013
-- убрал /manager/ , заменил на MODX_MANAGER_PATH
-- убрал $mod_id из конфигурации
-- убрал $path из конфигурации
-- исправлена проблема с сылками
-UPD июнь 2013
-- добавлен импорт из csv с настройками
-	указывайте номера строк с именем, фамилией, email и строки которые необходимо исключить из импорта
-- обновлен импорт:
-	теперь повторяющиеся email не заносятся в базу данных.
-- добавлено создание подписчика
-- добавлено удаление нескольких или всех подписчиков
-UPD декабрь 2013 - январь 2014
-- добавлена возможность "отложенной отправки" (выбранным пользователям)
-- экспорт резервных копий
-- восстановление резервных копий
-- присваивание категорий подписчикам
-- фильтрация по категориям
-- просмотр отчетов по отправке писем
-- улучшен интерфейс
-- в БД добавлены 2 колонки 
-- установка / обновление в howto.html
----------------------------------------------------------------------*/
+if(IN_MANAGER_MODE!='true' && !$modx->hasPermission('exec_module')) die('<b>INCLUDE_ORDERING_ERROR</b><br /><br />Please use the MODX Content Manager instead of accessing this file directly.');
 
 $mod_id = $_REQUEST['id'];
 $path = MODX_BASE_PATH.'assets/modules/easynewsletter/';

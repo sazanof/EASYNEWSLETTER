@@ -1,81 +1,8 @@
-.mceToolbar tr td {padding: 0 !important}
-
-.descr {display:block; margin:3px 0; color:#777; font-size:11px}
-
-.prevModal {background:#efefef; border:5px solid #ddd;box-shadow:0 0 10px #888;position:absolute; z-index:100; width:650px; top:130px; left:50%; margin-left:-325px}
-.sectionBody.mod {background:#efefef; padding:10px; margin:5px; }
-.sectionHeader.head {margin:5px;}
-
-#close {margin:0 auto; display:block; width:100px; text-align:center; position:relative; bottom:-46px; top:41px}
-
-.but {
-	-moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	-webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #ededed), color-stop(1, #dfdfdf) );
-	background:-moz-linear-gradient( center top, #ededed 5%, #dfdfdf 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ededed', endColorstr='#dfdfdf');
-	background-color:#ededed;
-	-moz-border-radius:3x;
-	-webkit-border-radius:3px;
-	border-radius:3px;
-	border:1px solid #ccc;
-	display:inline-block;
-	color:#444 !important;
-	font-family:arial;
-	font-size:12px;
-	font-weight:bold;
-	padding:5px 6px;
-	text-decoration:none; margin:3px 3px 3px 0; cursor:pointer;
-	text-shadow:1px 1px 0px #ffffff;
-	width:auto; text-decoration:none !important;
-}
-.but img {float:left; margin-right:4px}
-.but:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #dfdfdf), color-stop(1, #ededed) );
-	background:-moz-linear-gradient( center top, #dfdfdf 5%, #ededed 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#dfdfdf', endColorstr='#ededed');
-	background-color:#dfdfdf;
-}
-.but:active {
-	position:relative;
-	top:1px;
-}
-
-.but.roundbut {padding:3px;height:16px; width:16px; border-radius:50%;}
-.flRight {position:absolute; text-shadow:none; border-radius:3px; top:6px; width:auto !important; border:none; right:17px; padding:4px 6px; color:#fff;background:#8aae4b;display:block;font-size:11px; text-decoration:none; font-weight:normal;}
-.actionMainSend {margin:4px 0; padding:4px;background:#fff; border:1px solid #ddd}
-.but div {position:absolute; width:200px; background:#333; color:#fff; top:30px;left:-40px; font-weight:normal; padding:5px; border-radius:5px; display:none; text-shadow:none}
-.but:hover div {display:block}
-
-.nounder a.but, a.nounder {text-decoration:none;color:#555}
-
-.upload_info {padding:6px; margin:7px 0; color:#888; border-radius:4px; border: 1px dashed #888; font-size:11px; background:#f8f8f8}
-
-div.predpr {display:inline-block; width:230px; padding:6px; margin:10px; border:1px dashed #888; border-radius:4px}
-
-.gridSubscribers {border:1px solid #ccc; background:#fff; margin-bottom:10px;}
-.gridSubscribers tr td {padding:2px 6px}
-.gridSubscribers tr:hover td {background: #d4d4d4; cursor:pointer; border-color:#999}
-
-.bckp_list {padding:0; margin:0;}
-.bckp_list li{display:inline-block;padding:0; margin:5px; background:#ddd; border-radius:20px; vertical-align:middle}
-.bckp_list li div {float:left; margin-top:6px; margin-right:4px; margin-left:4px}
-
-.actionMainSendRight {display:inline-block; float:right}
-
-.infoMess {padding:10px; background:#fff}
-
-.headTR {background:#444}
-.headTR th {padding:10px 4px; color:#fff}
-.headTR th a {color:#fff}
-.CHECKEDTR {background:#a6f574}
-
-.actButs {text-align:right; z-index:10;position:fixed; bottom:0; box-shadow:0 0 10px #333; right:30px; background:#fff; border-top:4px solid #ddd;border-right:4px solid #ddd;  border-left:4px solid #ddd;  border-radius:5px 5px 0 0; padding:4px}
-.actButs span {display:block; font-weight:bold; text-align:left}
-.actButs.add-form {left:10px; right:auto; background:#c5ecbb; border-color:#8bb97e}
-
-.pagination {height:30px}
-.pagination a {display:block; margin:10px}
-#next,#ToTop {display:none}
-#infscr-loading {text-align:center; display:block;position:fixed; padding:10px; background:#d3fbca; font-weight:bold; border:1px solid #96d288; border-radius:3px;z-index:100; top:10px; left:10px}
+#actions {height:54px;}
+.tbl_subscribers{margin-top:15px}
+button {width: auto;}
+.btn-warning,.btn-success,.btn-danger,.btn-info {color:#ffffff !important;}
+.btn-default {color:#666 !important;}
+.floatright {float:right}
+.btn.round-corners {border-radius:50%;padding:5px;height: 32px;width:32px}
+.even {background-color:#ffffff}

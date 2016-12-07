@@ -7,15 +7,21 @@ $lang['title'] = "Модуль управления рассылкой для MO
 $lang['links_subscribers'] = "Подписчики";
 $lang['links_newsletter'] = "Письма";
 $lang['links_configuration'] = "Настройки";
+$lang['links_categories'] = "Категории";
+//
+$lang['links_help'] = "Помощь";
+//
 $lang['links_import'] = "Импорт из csv";
 $lang['import_exclude'] = "Вы можете исключить строки из импорта.<br> Указываются в формате 1,2,3";
 $lang['import_notify'] = "Контакты, которые будут импортированы в модуль";
 
-$lang['import_title'] = "Импорт данных из csv файла";
+$lang['import_title'] = "Загрузить из csv";
 $lang['import_sub'] = "Загрузить файл";
 $lang['import_upltxt'] = "Загрузка файла";
 $lang['import_not_choose'] = "Вы не выбрали файл!";
 $lang['import_submit'] = "Импортировать";
+
+$lang['backup_btn'] = "Резервное копирование";
 
 $lang['mailinglist'] = "Пожалуйста введите ваше имя и e-mail адрес чтобы подписаться или отписаться от новостной рассылки.";
 $lang['firstname'] = "Имя";
@@ -60,7 +66,7 @@ $lang['newsletter_edit_create'] = "Письмо создано!";
 $lang['subscriber_noposts'] = "Нет зарегистрированных подписчиков.";
 $lang['subscriber_delete_alert'] = "Вы правда хотите удалить:";
 $lang['subscriber_edit_header'] = "Редактируйте информацию о подписчиках здесь.";
-$lang['subscriber_add_header'] = "Добавление нового подписчика";
+$lang['subscriber_add_header'] = "Добавить подписчика";
 $lang['subscriber_created'] = "Создано";
 $lang['subscriber_firstname'] = "Имя";
 $lang['subscriber_lastname'] = "Фамилия";
@@ -94,4 +100,6 @@ $lang['config_lang_manager'] = "Язык - бэкенд";
 $lang['config_lang_manager_description'] = "Язык, использующийся в системе управления.";
 $lang['config_save'] = "Сохранить настройки";
 $lang['config_update'] = "Настройки обновлены!";
+
+
 ?>
