@@ -1,43 +1,69 @@
 CREATE TABLE `easynewsletter_categories` (
-  `id` int(11) NOT NULL,
-  `kat_title` varchar(255) NOT NULL,
-  `kat_descr` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`kat_title` VARCHAR(255) NULL DEFAULT NULL,
+	`kat_descr` TEXT NULL,
+	PRIMARY KEY (`id`),
+	UNIQUE INDEX `id_2` (`id`),
+	INDEX `id` (`id`),
+	INDEX `id_3` (`id`),
+	INDEX `id_4` (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM
+AUTO_INCREMENT=4
+;
 
 CREATE TABLE `easynewsletter_config` (
-  `id` int(11) NOT NULL DEFAULT '0',
-  `mailmethod` varchar(20) NOT NULL DEFAULT '',
-  `port` int(11) NOT NULL DEFAULT '0',
-  `smtp` varchar(200) NOT NULL DEFAULT '',
-  `auth` varchar(5) NOT NULL DEFAULT '',
-  `authuser` varchar(100) NOT NULL DEFAULT '',
-  `authpassword` varchar(100) NOT NULL DEFAULT '',
-  `sendername` varchar(200) NOT NULL DEFAULT '',
-  `senderemail` varchar(200) NOT NULL DEFAULT '',
-  `lang_frontend` varchar(100) NOT NULL DEFAULT '',
-  `lang_backend` varchar(100) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`mailmethod` VARCHAR(255) NOT NULL DEFAULT '',
+	`port` INT(5) NOT NULL DEFAULT '0',
+	`smtp` VARCHAR(200) NOT NULL DEFAULT '',
+	`auth` VARCHAR(5) NOT NULL DEFAULT '',
+	`authuser` VARCHAR(100) NOT NULL DEFAULT '',
+	`authpassword` VARCHAR(100) NOT NULL DEFAULT '',
+	`sendername` VARCHAR(200) NOT NULL DEFAULT '',
+	`senderemail` VARCHAR(200) NOT NULL DEFAULT '',
+	`lang_frontend` VARCHAR(100) NOT NULL DEFAULT '',
+	`lang_backend` VARCHAR(100) NOT NULL DEFAULT '',
+	PRIMARY KEY (`id`),
+	INDEX `id` (`id`),
+	INDEX `id_2` (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM
+AUTO_INCREMENT=2
+;
 
 CREATE TABLE `easynewsletter_newsletter` (
-  `id` int(11) NOT NULL,
-  `date` date NOT NULL DEFAULT '0000-00-00',
-  `status` int(11) NOT NULL DEFAULT '0',
-  `sent` int(11) NOT NULL DEFAULT '0',
-  `header` longtext,
-  `subject` text NOT NULL,
-  `newsletter` longtext,
-  `footer` longtext,
-  `dates` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`id` INT(10) NOT NULL AUTO_INCREMENT,
+	`date` DATE NOT NULL DEFAULT '0000-00-00',
+	`status` INT(10) NOT NULL DEFAULT '0',
+	`sent` INT(10) NOT NULL DEFAULT '0',
+	`header` LONGTEXT NULL,
+	`subject` TEXT NOT NULL,
+	`newsletter` LONGTEXT NULL,
+	`footer` LONGTEXT NULL,
+	`dates` TEXT NOT NULL,
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM
+AUTO_INCREMENT=4
+;
 
 CREATE TABLE `easynewsletter_subscribers` (
-  `id` int(11) NOT NULL,
-  `firstname` varchar(50) NOT NULL DEFAULT '',
-  `lastname` varchar(50) NOT NULL DEFAULT '',
-  `email` varchar(50) NOT NULL DEFAULT '',
-  `status` int(11) NOT NULL DEFAULT '1',
-  `blocked` int(11) NOT NULL DEFAULT '0',
-  `lastnewsletter` varchar(50) NOT NULL DEFAULT '',
-  `created` date NOT NULL DEFAULT '0000-00-00',
-  `cat_id` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+	`id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+	`firstname` VARCHAR(50) NULL DEFAULT NULL,
+	`lastname` VARCHAR(50) NULL DEFAULT NULL,
+	`email` VARCHAR(50) NULL DEFAULT NULL,
+	`status` INT(10) NULL DEFAULT '1',
+	`blocked` INT(10) NULL DEFAULT '0',
+	`lastnewsletter` VARCHAR(50) NULL DEFAULT NULL,
+	`created` DATE NOT NULL DEFAULT '0000-00-00',
+	`cat_id` INT(10) NOT NULL DEFAULT '0',
+	PRIMARY KEY (`id`)
+)
+COLLATE='utf8_general_ci'
+ENGINE=MyISAM
+AUTO_INCREMENT=10
+;
